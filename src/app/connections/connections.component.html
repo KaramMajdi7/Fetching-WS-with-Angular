@@ -1,0 +1,11 @@
+<h2>WebSocket Connections</h2>
+<ul>
+  <li *ngFor="let msg of messages">{{ msg.name }} : {{ msg.message }}</li>
+</ul>
+<div *ngIf="isHereTyping">
+    <p>{{ typingName }} is typing...</p>
+  </div>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <input formControlName="message" id="message" name="message" type="text"  (blur)="onBlur()"  (focus)="onFocus()" />
+    <button type="submit">Send</button>
+</form>
