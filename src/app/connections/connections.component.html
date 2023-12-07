@@ -1,11 +1,36 @@
-<h2>WebSocket Connections</h2>
-<ul>
-  <li *ngFor="let msg of messages">{{ msg.name }} : {{ msg.message }}</li>
-</ul>
-<div *ngIf="isHereTyping">
-    <p>{{ typingName }} is typing...</p>
-  </div>
+<div style="margin: 15px 15px;">
+  <p-breadcrumb class="max-w-full" [model]="items"></p-breadcrumb>
+</div>
+
+<div style="margin: 15px 15px;">
+  <p-panel>
+    <ng-template pTemplate="header"> <span class="text-primary font-semibold text-xl">WebSocket Connections</span></ng-template>
+    <ul style="list-style: none;">
+      <li *ngFor="let msg of messages" style="margin: 10px 0;">
+        <p-fieldset legend="{{ msg.name }}">
+          <p class="m-0">
+            {{ msg.message }}
+          </p>
+        </p-fieldset>
+      </li>
+    </ul>
+  </p-panel>
+</div>
+
+<div *ngIf="isHereTyping" style="margin: 10px 10px;">
+    <p-messages severity="success">
+      <ng-template pTemplate>
+          <div class="ml-2">{{ typingName }} is typing...</div>
+      </ng-template>
+    </p-messages>
+</div>
+
+
+
 <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-    <input formControlName="message" id="message" name="message" type="text"  (blur)="onBlur()"  (focus)="onFocus()" />
-    <button type="submit">Send</button>
+  <span class="p-input-icon-left" style="margin: 0 15px;">
+    <input formControlName="message" pInputText id="message" name="message" type="text"  (blur)="onBlur()"  (focus)="onFocus()" />
+  </span>
+    
+  <p-button label="Send" type="submit"></p-button>
 </form>

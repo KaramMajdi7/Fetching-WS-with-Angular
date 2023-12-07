@@ -10,6 +10,15 @@ import { NameDialogComponent } from './name-dialog/name-dialog.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { FieldsetModule } from 'primeng/fieldset';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import {AvatarModule} from 'primeng/avatar';
+import {AvatarGroupModule} from 'primeng/avatargroup';
+import { PanelModule } from 'primeng/panel';
+import { MessagesModule } from 'primeng/messages';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +34,14 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
+    ButtonModule,
+    InputTextModule,
+    FieldsetModule,
+    BreadcrumbModule,
+    AvatarModule,
+    AvatarGroupModule,
+    PanelModule,
+    MessagesModule
   ],
   providers: [WebsocketService],
   bootstrap: [AppComponent]

@@ -3,6 +3,7 @@ import { WebsocketService } from '../websocket.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NameDialogComponent } from '../name-dialog/name-dialog.component';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-connections',
@@ -16,6 +17,7 @@ export class ConnectionsComponent implements OnInit {
   name!: string;
   isHereTyping: boolean = false;
   typingName: string = '';
+  items!: MenuItem[];
 
   constructor(private dialog: MatDialog, private formBuilder: FormBuilder, private websocketService: WebsocketService) {
     this.productForm = this.formBuilder.group({
@@ -25,6 +27,13 @@ export class ConnectionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.openNameDialog();
+
+    this.items = [
+      {label:'Home', routerLink: '/', icon: 'pi pi-home'},
+      {label:'Connections', routerLink: '/connections'},
+    ];
+
+
     this.websocketService.findAllMessages().subscribe((data: any) => {
       this.messages.push(data);
       console.log(data);
