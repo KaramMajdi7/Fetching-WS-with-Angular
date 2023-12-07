@@ -12,12 +12,15 @@ import { MenuItem } from 'primeng/api';
 })
 export class ConnectionsComponent implements OnInit {
 
-  messages: any[] = [];
+  messages: { [room: string]: { sender: string; message: string }[] } = {};
   productForm!: FormGroup;
   name!: string;
   isHereTyping: boolean = false;
   typingName: string = '';
   items!: MenuItem[];
+  rooms: any[] = []; 
+  active!: any; 
+  bool: boolean = false;
 
   constructor(private dialog: MatDialog, private formBuilder: FormBuilder, private websocketService: WebsocketService) {
     this.productForm = this.formBuilder.group({
@@ -33,10 +36,47 @@ export class ConnectionsComponent implements OnInit {
       {label:'Connections', routerLink: '/connections'},
     ];
 
+    this.rooms = [ 
+      { 
+          label: 'TypeScript', 
+          queryParams: { room: 'TypeScript', bool: false },
+          command: (event: any) => {
+            this.active = this.rooms[0]; 
+            this.bool = this.rooms[0].queryParams.bool;
+            console.log(this.active.label);
+            console.log(this.bool);
+          },
+      }, 
+      { 
+          label: 'NestJS', 
+          queryParams: { room: 'NestJS', bool: false },
+          command: (event: any) => {
+            this.active = this.rooms[1]; 
+            this.bool = this.rooms[1].queryParams.bool;
+            console.log(this.active.label);
+            console.log(this.bool);
+          },
+      }, 
+    ]; 
+    this.active = this.rooms[0];
 
+      // this.messages.push({ [data.room]: [data.message]});
     this.websocketService.findAllMessages().subscribe((data: any) => {
-      this.messages.push(data);
-      console.log(data);
+      console.log(this.messages);
+
+      if (!this.messages[data.room]) {
+        this.messages[data.room] = [];
+      }
+  
+      const formattedMessage = { sender: data.name, message: data.message };
+      this.messages[data.room].push(formattedMessage);
+  
+      console.log(this.messages);
+
+    })
+
+    this.websocketService.socket.on('joinedRoom', (data: any) => {
+      console.log(`Room on client: ${data}`);
     })
 
     this.websocketService.socket.on('typing', (data: any) => {
@@ -69,7 +109,7 @@ export class ConnectionsComponent implements OnInit {
   }
 
   onSubmit() {
-    this.websocketService.createMessage({ name: this.name, message: this.productForm.value.message });
+    this.websocketService.createMessage({ name: this.name, message: this.productForm.value.message, room: this.active.label });
     this.productForm.reset();
   }
 
@@ -83,6 +123,19 @@ export class ConnectionsComponent implements OnInit {
 
   onBlur() {
     this.websocketService.socket.emit('typing', { isTyping: false });
+  }
+
+  toggleJoining() {
+    console.log(`Room from component: ${this.active.label}`);
+    if(this.bool){
+      this.websocketService.leaveRoom(this.active.label);
+      this.active.queryParams.bool = false;
+      this.bool = false;
+    } else {
+      this.websocketService.joinRoom(this.active.label);
+      this.active.queryParams.bool = true;
+      this.bool = true;
+    }
   }
 
 }

@@ -12,16 +12,25 @@ export class WebsocketService {
     this.socket = io('http://localhost:3001');
   }
 
-    createMessage(message: {name: string, message: string}): void {
-        this.socket.emit('chatToServer', message);
-    }
+  joinRoom(room: string ) {
+    console.log(`Room from service: ${room}`);
+    this.socket.emit('joinRoom', room );
+  }
 
-    findAllMessages(): Observable<any> {
-        return new Observable((observer) => {
-            this.socket.on('chatToClient', (data: any) => {
-                observer.next(data);
-            });
-        });
-    }
+  leaveRoom(room: string ) {
+    this.socket.emit('leaveRoom', room );
+  }
+
+  createMessage(message: {name: string, message: string, room: string}): void {
+      this.socket.emit('chatToServer', message);
+  }
+
+  findAllMessages(): Observable<any> {
+      return new Observable((observer) => {
+          this.socket.on('chatToClient', (data: any) => {
+              observer.next(data);
+          });
+      });
+  }
 
 }

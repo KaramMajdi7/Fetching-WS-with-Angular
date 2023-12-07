@@ -18,6 +18,7 @@ import {AvatarModule} from 'primeng/avatar';
 import {AvatarGroupModule} from 'primeng/avatargroup';
 import { PanelModule } from 'primeng/panel';
 import { MessagesModule } from 'primeng/messages';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { MessagesModule } from 'primeng/messages';
     AvatarModule,
     AvatarGroupModule,
     PanelModule,
-    MessagesModule
+    MessagesModule,
+    TabMenuModule
   ],
   providers: [WebsocketService],
   bootstrap: [AppComponent]

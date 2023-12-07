@@ -3,11 +3,29 @@
 </div>
 
 <div style="margin: 15px 15px;">
+  <p-tabMenu 
+    [model]="rooms" 
+    [activeItem]="active"> 
+  </p-tabMenu> 
+</div>
+
+<div style="margin: 15px 15px;">
+  <p-button (onClick)="toggleJoining()" type="submit">
+    <ng-container *ngIf="bool; else elseBlock">
+      Leave
+    </ng-container>
+    <ng-template #elseBlock>
+      Join
+    </ng-template>
+  </p-button>
+</div>  
+
+<div style="margin: 15px 15px;">
   <p-panel>
     <ng-template pTemplate="header"> <span class="text-primary font-semibold text-xl">WebSocket Connections</span></ng-template>
     <ul style="list-style: none;">
-      <li *ngFor="let msg of messages" style="margin: 10px 0;">
-        <p-fieldset legend="{{ msg.name }}">
+      <li *ngFor="let msg of messages[this.active.label]" style="margin: 10px 0;">
+        <p-fieldset legend="{{ msg.sender }}">
           <p class="m-0">
             {{ msg.message }}
           </p>
@@ -18,19 +36,20 @@
 </div>
 
 <div *ngIf="isHereTyping" style="margin: 10px 10px;">
-    <p-messages severity="success">
-      <ng-template pTemplate>
-          <div class="ml-2">{{ typingName }} is typing...</div>
-      </ng-template>
-    </p-messages>
+  <p-messages severity="success">
+    <ng-template pTemplate>
+        <div class="ml-2">{{ typingName }} is typing...</div>
+    </ng-template>
+  </p-messages>
 </div>
 
 
-
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-  <span class="p-input-icon-left" style="margin: 0 15px;">
-    <input formControlName="message" pInputText id="message" name="message" type="text"  (blur)="onBlur()"  (focus)="onFocus()" />
-  </span>
-    
-  <p-button label="Send" type="submit"></p-button>
-</form>
+<div *ngIf="bool">
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <span class="p-input-icon-left" style="margin: 0 15px;">
+      <input formControlName="message" pInputText id="message" name="message" type="text"  (blur)="onBlur()"  (focus)="onFocus()" />
+    </span>
+      
+    <p-button label="Send" type="submit"></p-button>
+  </form>
+</div>
