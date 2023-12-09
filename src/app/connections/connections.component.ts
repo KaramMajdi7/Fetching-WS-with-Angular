@@ -15,8 +15,9 @@ export class ConnectionsComponent implements OnInit {
   messages: { [room: string]: { sender: string; message: string }[] } = {};
   productForm!: FormGroup;
   name!: string;
-  isHereTyping: boolean = false;
+  isHereTyping: any[] = [];
   typingName: string = '';
+  typingRoom!: any; 
   items!: MenuItem[];
   rooms: any[] = []; 
   active!: any; 
@@ -80,13 +81,17 @@ export class ConnectionsComponent implements OnInit {
     })
 
     this.websocketService.socket.on('typing', (data: any) => {
-      console.log(data);
-      if(data.isTyping){
-        this.isHereTyping = true;
+      if(data.typingInst.isTyping){
+        this.isHereTyping[data.typingInst.room] = true;
+        this.typingRoom = data.typingInst.room;
         this.typingName = data.name;
+        console.log(this.typingName);
+        console.log(this.isHereTyping);
+        console.log(this.isHereTyping[data.typingInst.room]);
       } else {
-        this.isHereTyping = false;
+        this.isHereTyping[data.typingInst.room] = false;
         this.typingName = '';
+        this.typingRoom = '';
       }
     })
   }
@@ -115,14 +120,14 @@ export class ConnectionsComponent implements OnInit {
 
   onFocus() {
     let timeout;
-    this.websocketService.socket.emit('typing', { isTyping: true });
+    this.websocketService.socket.emit('typing', { typingInst: { isTyping: true, room: this.active.label } });
     setTimeout(() => {
-      this.websocketService.socket.emit('typing', { isTyping: false });
+      this.websocketService.socket.emit('typing', { typingInst: { isTyping: false, room: this.active.label } });
     }, 3000);
   }
 
   onBlur() {
-    this.websocketService.socket.emit('typing', { isTyping: false });
+    this.websocketService.socket.emit('typing', { typingInst: { isTyping: false, room: this.active.label } });
   }
 
   toggleJoining() {

@@ -35,14 +35,15 @@
   </p-panel>
 </div>
 
-<div *ngIf="isHereTyping" style="margin: 10px 10px;">
-  <p-messages severity="success">
-    <ng-template pTemplate>
-        <div class="ml-2">{{ typingName }} is typing...</div>
-    </ng-template>
-  </p-messages>
+<div *ngIf="typingRoom == this.active.label">
+  <div *ngIf="isHereTyping[typingRoom]" style="margin: 10px 10px;">
+    <p-messages severity="success">
+      <ng-template pTemplate>
+          <div class="ml-2">{{ typingName }} is typing...</div>
+      </ng-template>
+    </p-messages>
+  </div>
 </div>
-
 
 <div *ngIf="bool">
   <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
